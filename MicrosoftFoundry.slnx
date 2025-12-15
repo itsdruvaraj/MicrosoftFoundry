@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Classic/MicrosoftFoundry.Classic/MicrosoftFoundry.Classic.csproj" />
+  <Project Path="New/MicrosoftFoundry.New/MicrosoftFoundry.New.csproj" />
+</Solution>
