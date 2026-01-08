@@ -20,8 +20,10 @@ try
     Console.WriteLine("  1. Basic Agent - Simple conversational agent");
     Console.WriteLine("  2. MCP Agent - Microsoft Learn documentation search");
     Console.WriteLine("  3. Custom MCP Agent - Custom MCP server integration");
+    Console.WriteLine("  4. Custom MCP Agent (No Auth) - Custom MCP server without authentication");
+    Console.WriteLine("  5. Content Filter Tester - Compare CF_Agent vs NF_Agent");
     Console.WriteLine();
-    Console.Write("Enter your choice (1, 2, or 3): ");
+    Console.Write("Enter your choice (1-5): ");
 
     var choice = Console.ReadLine()?.Trim();
 
@@ -41,8 +43,16 @@ try
             var customMcpAgent = new CustomMCPAgent(factory);
             await customMcpAgent.RunAsync();
             break;
+        case "4":
+            var customMcpAgentNoAuth = new CustomMCPAgentNoAuth(factory);
+            await customMcpAgentNoAuth.RunAsync();
+            break;
+        case "5":
+            var filterTester = new ContentFilterTester(factory);
+            await filterTester.RunAsync();
+            break;
         default:
-            Console.WriteLine("Invalid choice. Please enter 1, 2, or 3.");
+            Console.WriteLine("Invalid choice. Please enter 1-5.");
             break;
     }
 }

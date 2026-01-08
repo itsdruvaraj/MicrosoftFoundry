@@ -68,7 +68,7 @@ public sealed class CustomMCPAgent
             // TODO: Update with your sample queries
             var questions = new[]
             {
-                "Start data analysis for dataset - NewSampleAnalysis"
+                "Multiplty 10 and 20"
             };
 
             foreach (var question in questions)
@@ -83,7 +83,14 @@ public sealed class CustomMCPAgent
                     cancellationToken: cancellationToken);
 
                 // Set up MCP tool resources with auto-approval and authentication
-                string bearerToken = "your_bearer_token_here"; // TODO: Replace with actual token retrieval logic
+                // Bearer token should be set via user secrets: dotnet user-secrets set "CUSTOM_MCP_BEARER_TOKEN" "<your-token>"
+                string? bearerToken = Environment.GetEnvironmentVariable("CUSTOM_MCP_BEARER_TOKEN");
+                if (string.IsNullOrWhiteSpace(bearerToken))
+                {
+                    throw new InvalidOperationException(
+                        "CUSTOM_MCP_BEARER_TOKEN is required. Set it via user secrets: dotnet user-secrets set \"CUSTOM_MCP_BEARER_TOKEN\" \"<your-token>\"");
+                }
+
                 var mcpToolResource = new MCPToolResource(McpServerLabel)
                 {
                     RequireApproval = new MCPApproval("never") // Auto-approve for demo
@@ -117,13 +124,6 @@ public sealed class CustomMCPAgent
 
                 Console.WriteLine();
 
-                // Handle MCP tool 504 error by adding delay to the application and fetch the API response.
-
-                await client.Messages.CreateMessageAsync(
-                    thread.Id,
-                    MessageRole.Agent,
-                    "Add API response back to the thread before executing the next agent.",
-                    cancellationToken: cancellationToken);
             }
         }
         finally

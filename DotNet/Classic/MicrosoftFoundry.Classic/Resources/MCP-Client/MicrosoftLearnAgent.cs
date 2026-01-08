@@ -43,6 +43,13 @@ public sealed class MicrosoftLearnAgent
             Console.WriteLine($"Creating MCP tool for {McpServerUrl}...");
             var mcpTool = new MCPToolDefinition(serverLabel: McpServerLabel, serverUrl: McpServerUrl);
 
+            // Set up MCP tool resources with auto-approval
+            var mcpToolResource = new MCPToolResource(McpServerLabel)
+            {
+                RequireApproval = new MCPApproval("never") // Auto-approve for demo
+            };
+            var toolResources = mcpToolResource.ToToolResources();
+
             // Create an agent with MCP tools
             Console.WriteLine("Creating agent with MCP tools...");
             agent = await client.Administration.CreateAgentAsync(
@@ -56,7 +63,8 @@ public sealed class MicrosoftLearnAgent
                     Be concise and cite the sources when providing information.
                     """,
                 tools: [mcpTool],
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken,
+                toolResources: toolResources);
 
             Console.WriteLine($"Agent created: {agent.Name} (ID: {agent.Id})");
 
@@ -83,12 +91,12 @@ public sealed class MicrosoftLearnAgent
                     question,
                     cancellationToken: cancellationToken);
 
-                // Set up MCP tool resources with auto-approval
-                var mcpToolResource = new MCPToolResource(McpServerLabel)
-                {
-                    RequireApproval = new MCPApproval("never") // Auto-approve for demo
-                };
-                var toolResources = mcpToolResource.ToToolResources();
+                // // Set up MCP tool resources with auto-approval
+                // var mcpToolResource = new MCPToolResource(McpServerLabel)
+                // {
+                //     RequireApproval = new MCPApproval("never") // Auto-approve for demo
+                // };
+                // var toolResources = mcpToolResource.ToToolResources();
 
                 // Create and run the agent
                 ThreadRun run = await client.Runs.CreateRunAsync(thread, agent, toolResources, cancellationToken: cancellationToken);
@@ -118,9 +126,9 @@ public sealed class MicrosoftLearnAgent
         }
         finally
         {
-            Console.WriteLine("Cleaning up resources...");
-            await _factory.CleanupAsync(agent, thread, cancellationToken);
-            Console.WriteLine("Cleanup complete.");
+            // Console.WriteLine("Cleaning up resources...");
+            // await _factory.CleanupAsync(agent, thread, cancellationToken);
+            // Console.WriteLine("Cleanup complete.");
         }
     }
 
