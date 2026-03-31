@@ -184,7 +184,9 @@ public sealed class FoundryClientFactory
             await Task.Delay(TimeSpan.FromMilliseconds(500), cancellationToken);
             run = await client.Runs.GetRunAsync(threadId, runId, cancellationToken);
         }
-        while (run.Status == RunStatus.Queued || run.Status == RunStatus.InProgress);
+        while (run.Status == RunStatus.Queued
+            || run.Status == RunStatus.InProgress
+            || run.Status == RunStatus.RequiresAction);
 
         return run;
     }

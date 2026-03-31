@@ -1,0 +1,95 @@
+{
+  "choices": [
+    {
+      "content_filter_results": {
+        "custom_blocklists": [
+          {
+            "filtered": true,
+            "id": "MaliciousScript_Blocklist"
+          }
+        ],
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "protected_material_code": {
+          "detected": false,
+          "filtered": false
+        },
+        "protected_material_text": {
+          "detected": false,
+          "filtered": false
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        }
+      },
+      "finish_reason": "content_filter",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "content": "{\n  \"agentName\": \"myISP_Get_ProductivityDetailsForStaffing\",\n  \"agentResponse\": \"Logical Reasoning:\\n\\n**Step 1: Input Validation**\\n- User request includes clear staffing productivity instructions for both AM and AD groups.\\n- Productivities are cumulative for each group, and specific months (1, 13, 25, 31) with percent values (0, 10, 16, 25) are given for both groups.\\n- groups_List (from prior agent):\\n  [\\n    {\\\"SolutionGroupId\\\": 1305047, \\\"SolutionGroupNm\\\": \\\"AM\\\", \\\"ServiceTypeNm\\\": \\\"AM\\\"},\\n    {\\\"SolutionGroupId\\\": 1305048, \\\"SolutionGroupNm\\\": \\\"AD\\\", \\\"ServiceTypeNm\\\": \\\"AD\\\"}\\n  ]\\n- DealDuration: 36 months (from version details).\\n- All mandatory group fields present, no duplicates, structure is valid.\\n\\n**Step 2: Group Extraction and Strategy**\\n- The user asks for \\\"Apply Cumulative Productivity as below for both groups\u2026\\\" \u2013 interpreted as same schedule for each group.\\n- No ambiguous group/service type; all required groups are present in groups_List.\\n\\n**Step 3: Pr",        
+        "refusal": null,
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1773663007,
+  "id": "chatcmpl-DK13nuP30lNmdCKmbV1kg7GFFnpky",
+  "model": "gpt-4.1-2025-04-14",
+  "object": "chat.completion",
+  "prompt_filter_results": [
+    {
+      "prompt_index": 0,
+      "content_filter_results": {
+        "custom_blocklists": [],
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "jailbreak": {
+          "detected": false,
+          "filtered": false
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        }
+      }
+    }
+  ],
+  "system_fingerprint": "fp_63d8723934",
+  "usage": {
+    "completion_tokens": 592,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 3891,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 3840
+    },
+    "total_tokens": 4483
+  }
+}

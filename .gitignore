@@ -82,6 +82,30 @@ Desktop.ini
 .env.local
 *.env
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+.Python
+*.so
+*.pyd
+venv/
+.venv*/
+*-venv/
+.*-venv/
+env/
+.env/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter
+.ipynb_checkpoints/
+
 # Application Insights
 ApplicationInsights.config
 

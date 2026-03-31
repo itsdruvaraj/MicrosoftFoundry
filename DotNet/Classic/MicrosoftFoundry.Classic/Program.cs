@@ -1,4 +1,5 @@
-﻿using MicrosoftFoundry.Classic.Common;
+﻿using Microsoft.Extensions.Configuration;
+using MicrosoftFoundry.Classic.Common;
 using MicrosoftFoundry.Classic.Resources;
 
 Console.WriteLine("Microsoft Foundry Agent Examples");
@@ -11,6 +12,12 @@ try
     var configuration = FoundryClientFactory.CreateDefaultConfiguration();
     var factory = new FoundryClientFactory(configuration);
 
+    // Load user secrets into environment variables for components that use Environment.GetEnvironmentVariable
+    foreach (var kvp in configuration.AsEnumerable().Where(kvp => !string.IsNullOrEmpty(kvp.Value)))
+    {
+        Environment.SetEnvironmentVariable(kvp.Key, kvp.Value);
+    }
+
     Console.WriteLine($"Project Endpoint: {factory.ProjectEndpoint}");
     Console.WriteLine($"Model Deployment: {factory.ModelDeploymentName}");
     Console.WriteLine();
@@ -22,8 +29,9 @@ try
     Console.WriteLine("  3. Custom MCP Agent - Custom MCP server integration");
     Console.WriteLine("  4. Custom MCP Agent (No Auth) - Custom MCP server without authentication");
     Console.WriteLine("  5. Content Filter Tester - Compare CF_Agent vs NF_Agent");
+    Console.WriteLine("  6. Existing Agent - Retrieve and converse with a pre-existing agent");
     Console.WriteLine();
-    Console.Write("Enter your choice (1-5): ");
+    Console.Write("Enter your choice (1-6): ");
 
     var choice = Console.ReadLine()?.Trim();
 
@@ -51,8 +59,24 @@ try
             var filterTester = new ContentFilterTester(factory);
             await filterTester.RunAsync();
             break;
+        case "6":
+            Console.Write("Enter the existing agent ID: ");
+            var agentId = Console.ReadLine()?.Trim();
+            if (string.IsNullOrWhiteSpace(agentId))
+            {
+                Console.WriteLine("Agent ID is required.");
+                break;
+            }
+            Console.Write("Enter additional instructions (or press Enter to skip): ");
+            var additionalInstructions = Console.ReadLine()?.Trim();
+            var existingAgent = new ExistingAgent(
+                factory,
+                agentId,
+                string.IsNullOrWhiteSpace(additionalInstructions) ? null : additionalInstructions);
+            await existingAgent.RunAsync();
+            break;
         default:
-            Console.WriteLine("Invalid choice. Please enter 1-5.");
+            Console.WriteLine("Invalid choice. Please enter 1-6.");
             break;
     }
 }

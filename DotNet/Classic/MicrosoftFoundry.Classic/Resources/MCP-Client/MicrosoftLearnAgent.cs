@@ -64,7 +64,10 @@ public sealed class MicrosoftLearnAgent
                     """,
                 tools: [mcpTool],
                 cancellationToken: cancellationToken,
-                toolResources: toolResources);
+                toolResources: toolResources,
+                temperature: 0.2f,
+                topP: 0.8f
+                );
 
             Console.WriteLine($"Agent created: {agent.Name} (ID: {agent.Id})");
 
@@ -90,13 +93,6 @@ public sealed class MicrosoftLearnAgent
                     MessageRole.User,
                     question,
                     cancellationToken: cancellationToken);
-
-                // // Set up MCP tool resources with auto-approval
-                // var mcpToolResource = new MCPToolResource(McpServerLabel)
-                // {
-                //     RequireApproval = new MCPApproval("never") // Auto-approve for demo
-                // };
-                // var toolResources = mcpToolResource.ToToolResources();
 
                 // Create and run the agent
                 ThreadRun run = await client.Runs.CreateRunAsync(thread, agent, toolResources, cancellationToken: cancellationToken);
@@ -168,5 +164,4 @@ public sealed class MicrosoftLearnAgent
             }
         }
     }
-
 }

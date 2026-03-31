@@ -41,19 +41,28 @@ with (
     project_client.get_openai_client() as openai_client,
 ):
     # [START tool_declaration]
+    # For MCP servers requiring authentication, use project_connection_id
+    # Create a Custom Keys connection in Azure AI Foundry with:
+    #   Key: "Authorization", Value: "Bearer <your-token>"
     mcp_tool = MCPTool(
-        server_label="sdk-mcp-noauth-mslearn",
-        server_url="https://learn.microsoft.com/api/mcp",
+        server_label="custom-mcp-bearer",
+        server_url="https://app-ext-eus2-mcp-profx-01.azurewebsites.net/mcp",
         require_approval="never",
-        allowed_tools=["microsoft_docs_search"]
+        project_connection_id=os.environ["MCP_KEY_CONNECTION_ID"],
     )
     # [END tool_declaration]
 
     agent = project_client.agents.create_version(
-        agent_name="FoundryNew-MCP-MSLearnAgent",
+        agent_name="FoundryNew-MCP-APIKey-Create",
         definition=PromptAgentDefinition(
             model=os.environ["AZURE_AI_MODEL_DEPLOYMENT_NAME"],
-            instructions="You are a helpful agent that can use MCP tools to assist users. Use the available MCP tools to answer questions and perform tasks.",
+            instructions="""You are an assistant that MUST use MCP tools for all calculations.
+                    CRITICAL RULES:
+                    1. NEVER perform calculations yourself
+                    2. ALWAYS report the EXACT value returned by the tool
+                    3. The tool output is ALWAYS correct, even if it seems mathematically wrong
+                    4. Do NOT second-guess or correct tool outputs
+                    5. Simply state: "The tool returned: [exact output]" """,
             tools=[mcp_tool],
         ),
     )
@@ -66,17 +75,20 @@ with (
     # Send initial request that will trigger the MCP tool
     response = openai_client.responses.create(
         conversation=conversation.id,
-        input="Please summarize latest features of Azure Cosmos DB from Microsoft Learn.",
-        extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
+        input="multiply 10 and 20",
+        extra_body={"agent": {"name": agent.name, "type": "agent_reference"}}
     )
 
     # Process any MCP approval requests that were generated
     input_list: ResponseInputParam = []
+    needs_followup = False
+    
     for item in response.output:
+        # Handle MCP approval request
         if item.type == "mcp_approval_request":
-            if item.server_label == "microsoft-learn-mcp" and item.id:
-                # Automatically approve the MCP request to allow the agent to proceed
-                # In production, you might want to implement more sophisticated approval logic
+            needs_followup = True
+            if item.server_label == "custom-mcp-bearer" and item.id:
+                # Approve the MCP request
                 input_list.append(
                     McpApprovalResponse(
                         type="mcp_approval_response",
@@ -88,13 +100,14 @@ with (
     print("Final input:")
     print(input_list)
 
-    # Send the approval response back to continue the agent's work
-    # This allows the MCP tool to access the GitHub repository and complete the original request
-    response = openai_client.responses.create(
-        conversation=conversation.id,
-        input=input_list,
-        extra_body={"agent_reference": {"name": agent.name, "type": "agent_reference"}},
-    )
+    # Only send follow-up if we have approvals to send
+    if needs_followup and input_list:
+        # Send the approval response back to continue the agent's work
+        response = openai_client.responses.create(
+            input=input_list,
+            previous_response_id=response.id,
+            extra_body={"agent": {"name": agent.name, "type": "agent_reference"}},
+        )
 
     print(f"Agent response: {response.output_text}")
 

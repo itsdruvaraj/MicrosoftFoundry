@@ -1,0 +1,91 @@
+{
+  "choices": [
+    {
+      "content_filter_results": {
+        "custom_blocklists": {
+          "filtered": false
+        },
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "protected_material_code": {
+          "filtered": false,
+          "detected": false
+        },
+        "protected_material_text": {
+          "filtered": false,
+          "detected": false
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        }
+      },
+      "finish_reason": "stop",
+      "index": 0,
+      "logprobs": null,
+      "message": {
+        "annotations": [],
+        "content": "{\n  \"agentName\": \"myISP_Get_ProductivityDetailsForStaffing\",\n  \"agentResponse\": {\n    \"reasoning\": [\n      \"User request mentions cumulative productivity values to apply for both groups in a staffing context (AM & AD) and specifies exact percentages and months.\",\n      \"groups_List is present and valid: AM (SolutionGroupId 1305047), AD (1305048); both ServiceTypeNm match ['AM','AD'].\",\n      \"DealDuration is 36 (from June 2026 to May 2029, as per version window).\",\n      \"Ignore Gen AI productivity details (AM 25%, AD 35%) because they're in Gen AI context and not for staffing productivity, per agent rules.\",\n      \"User-provided cumulative productivity points are: Month 1: 0%, Month 13: 10%, Month 25: 16%, Month 31: 25%.\",\n      \"All specified months are within the 36-month DealDuration.\",\n      \"No additional patterns/intervals or phase-based or recurring increases after given months; there are no conflicting triggers.\",\n      \"Both groups receive identical schedules ('per group' allocation mode).\",\n      \"All values are within range (0-100%) and, as they are cumulative points (not increments), the maximum is 25% which is valid.\",\n      \"Custom_Productivity JSON created directly from input without external calls, in compliance with agent rules.\"\n    ],\n    \"Custom_Productivity\": [\n      {\n        \"SolutionGroupId\": 1305047,\n        \"SolutionGroupNm\": \"AM\",\n        \"ServiceTypeNm\": \"AM\",\n        \"MonthlyData\": {\n          \"M1\": 0,\n          \"M13\": 10,\n          \"M25\": 16,\n          \"M31\": 25\n        }\n      },\n      {\n        \"SolutionGroupId\": 1305048,\n        \"SolutionGroupNm\": \"AD\",\n        \"ServiceTypeNm\": \"AD\",\n        \"MonthlyData\": {\n          \"M1\": 0,\n          \"M13\": 10,\n          \"M25\": 16,\n          \"M31\": 25\n        }\n      }\n    ]\n  },\n  \"agentStatus\": \"Success\"\n}",
+        "refusal": null,
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1773676207,
+  "id": "chatcmpl-DK4UhD1ehIhrZd8lvdUKCTTJSero9",
+  "model": "gpt-4.1-2025-04-14",
+  "object": "chat.completion",
+  "prompt_filter_results": [
+    {
+      "prompt_index": 0,
+      "content_filter_results": {
+        "hate": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "jailbreak": {
+          "filtered": false,
+          "detected": false
+        },
+        "self_harm": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "sexual": {
+          "filtered": false,
+          "severity": "safe"
+        },
+        "violence": {
+          "filtered": false,
+          "severity": "safe"
+        }
+      }
+    }
+  ],
+  "system_fingerprint": "fp_63d8723934",
+  "usage": {
+    "completion_tokens": 465,
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+    "prompt_tokens": 3907,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0
+    },
+    "total_tokens": 4372
+  }
+}
